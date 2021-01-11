@@ -8,9 +8,12 @@
 package upgin
 
 import (
+	"apiDemo/upgin/config/logs"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"net/url"
+	"path"
 	"path/filepath"
 	"reflect"
 	"strings"
@@ -273,4 +276,62 @@ func Bind(e *gin.Engine) {
 	for pattern, root := range static {
 		e.Static(pattern, root)
 	}
+}
+
+
+
+func GetURL(endpoint string,fields ...interface{}) string {
+	controller := path.Base(endpoint)
+	paths := strings.Split(controller, ".")
+	if len(paths) <= 1 {
+		logs.Warn("urlfor endpoint must like path.controller.method")
+		return ""
+	}
+	if len(fields)%2 != 0 {
+		logs.Warn("urlfor params must key-value pair")
+		return ""
+	}
+	pkg := ""
+	if controller != endpoint {
+		pkg = path.Dir(endpoint)
+	}
+	return getURL(pkg, paths[0], paths[1], fields...)
+}
+
+func getURL(pkg string, controllerName string, methodName string, fields ...interface{}) string {
+	fieldLen := len(fields)
+	if fieldLen % 2 != 0 {
+		logs.Warn("urlfor params must key-value pair")
+		return ""
+	}
+
+	for pattern,cInfo := range controllerInfos {
+		if cInfo.controllerName == controllerName {
+			if pkg != "" && !strings.HasSuffix(cInfo.controllerType.PkgPath(), pkg) {
+				continue
+			}
+			for method,mName := range cInfo.methods {
+				if method == "GET" && mName == methodName {
+					flag := true
+					for i:=0; i< fieldLen; i+=2 {
+						fieldKey := fmt.Sprint(fields[i])
+						fieldValue := fmt.Sprint(fields[i+1])
+						if strings.HasPrefix(fieldKey, ":") {
+							pattern = strings.Replace(pattern, fieldKey, url.QueryEscape(fieldValue), 1)
+						}else{
+							if flag {
+								pattern += "?"
+							}else{
+								pattern += "&"
+							}
+							pattern += fmt.Sprintf("%s=%s", url.QueryEscape(fieldKey), url.QueryEscape(fieldValue))
+							flag = false
+						}
+					}
+					return pattern
+				}
+			}
+		}
+	}
+	return ""
 }

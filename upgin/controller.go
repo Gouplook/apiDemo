@@ -23,6 +23,10 @@ func (c *Controller)Init(ctx *gin.Context,method string){
 	c.Ctx =ctx
 	c.Method = method
 }
+func (c *Controller) Prepare(ctx *gin.Context) {
+}
+func (c *Controller) Finish(ctx *gin.Context) {
+}
 type ControllerInterface interface {
 	Init(ctx *gin.Context, method string)
 	Prepare(ctx *gin.Context)

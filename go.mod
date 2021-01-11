@@ -9,5 +9,6 @@ require (
 	github.com/smallnest/rpcx v0.0.0-20210107125003-9ec728bdda10 // indirect
 	github.com/uber/jaeger-client-go v2.25.0+incompatible // indirect
 	github.com/uber/jaeger-lib v2.4.0+incompatible // indirect
+	github.com/wenzhenxi/gorsa v0.0.0-20191231021121-58a13482fb09 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
 )

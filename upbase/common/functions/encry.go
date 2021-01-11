@@ -25,6 +25,7 @@ func getKey() []byte {
 	return []byte(hex.EncodeToString(m.Sum(nil)))
 }
 
+// 解码
 func EncodeStr(str string) string {
 	data := []byte(str)
 	dataLen := len(data)
@@ -34,6 +35,7 @@ func EncodeStr(str string) string {
 	return base64.StdEncoding.EncodeToString([]byte(GetRandomString(3) + string(data)))
 }
 
+// 编码过程
 func DecodeStr(str string) string {
 	decodeBytes, err := base64.StdEncoding.DecodeString(str)
 	if err != nil {
@@ -46,7 +48,7 @@ func DecodeStr(str string) string {
 	}
 	return string(data)
 }
-
+// 获取随机字符串
 func GetRandomString(length int, padding ...string) string {
 	str := "0123456789abcdef"
 	if padding != nil {

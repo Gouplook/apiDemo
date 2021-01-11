@@ -8,6 +8,8 @@
 package toolLib
 
 import (
+	"apiDemo/upbase/common/lang"
+	"errors"
 	"fmt"
 	"strings"
 )
@@ -23,7 +25,6 @@ func CreateKcErr( errCode string, errMsg ...string )  error {
 		errmsg = lang.GetLang( errCode )
 	}
 	return errors.New(fmt.Sprintf("%s#C#%s", errmsg, errCode ))
-
 }
 
 //返回错误的错误信息
