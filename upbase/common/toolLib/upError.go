@@ -17,9 +17,9 @@ import (
 //根据errcode 返回一个具体的错误信息
 //@param errCode string 错误码
 //@param errMsg ...string 错误信息
-func CreateKcErr( errCode string, errMsg ...string )  error {
+func CreateKcErr(errCode string, errMsg ...string )  error {
 	errmsg := ""
-	if len( errMsg ) > 0 {
+	if len(errMsg ) > 0 {
 		errmsg = errMsg[0]
 	}else{
 		errmsg = lang.GetLang( errCode )
