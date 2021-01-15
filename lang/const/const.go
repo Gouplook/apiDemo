@@ -8,6 +8,7 @@
 package _const
 
 const (
-	PARAMS_ERR       = "100000"
-	COMMON_BUSID_NIL = "199999"
+	PARAMS_ERR                 = "100000"
+	COMMON_BUSID_NIL           = "199999"
+	BUSSETTLED_COMPANYNAME_NIL = "200003"
 )
