@@ -19,7 +19,6 @@ import (
 type DemoController struct {
 	apiAuth.BusController
 }
-
 // 忽略鉴权验证
 func (d *DemoController) Prepare(ctx *gin.Context) {
 	d.Ignore = []string{"GetDemo"}
