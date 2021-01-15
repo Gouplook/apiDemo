@@ -279,7 +279,6 @@ func Bind(e *gin.Engine) {
 }
 
 
-
 func GetURL(endpoint string,fields ...interface{}) string {
 	controller := path.Base(endpoint)
 	paths := strings.Split(controller, ".")

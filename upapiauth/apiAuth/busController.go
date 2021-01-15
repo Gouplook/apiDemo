@@ -32,6 +32,7 @@ func (b *BusController) Prepare(ctx *gin.Context) {
 		b.BusId = b.Input.GetPost("busId").Int()
 		b.ShopId = b.Input.GetPost("shopId").Int()
 	}
+	// 如果没有忽略鉴权的方法，调用鉴权方法获取加密字符串
 	if !functions.InArray(b.Method, b.Ignore) {
 		// 调用客户端
 		busAuth := new(bus2.BusAuth).Init()
