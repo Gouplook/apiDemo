@@ -262,6 +262,12 @@ func execHandel(ctx *gin.Context)  {
 		}
 	}
 }
+
+func Group(group string) *routerGroup {
+	return  &routerGroup{group: group}
+}
+
+
 // Engine引擎是框架的实例
 func Bind(e *gin.Engine) {
 	for pattern,cInfo := range controllerInfos {

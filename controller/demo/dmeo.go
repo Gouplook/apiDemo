@@ -27,14 +27,12 @@ func (d *DemoController) Prepare(ctx *gin.Context) {
 	d.Ignore = []string{"GetDemo"}
 	//d.BusController.Prepare(ctx) 也可以
 	d.UserController.Prepare(ctx)
-
 }
 
 // 正常的请求
 // bstoken和Utoken说明：
 // busController  继承 userController
 func (d *DemoController) GetDemo() {
-
 	// 1: 获取输入值
 	busId := d.Input.GetPost("busId").Int()
 	shopId := d.Input.GetPost("shopId").Int()

@@ -16,7 +16,6 @@ import (
 type DemoLogic struct {
 }
 
-
 func (d *DemoLogic) GetDemo(ctx context.Context, args *demo.ArgsDemo, reply *demo.ReplyDemo) (err error) {
 	demoClient := new(demo2.Demo).Init()
 	defer demoClient.Close()

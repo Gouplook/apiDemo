@@ -7,15 +7,20 @@
 *********************************************/
 package httpdemo
 
-import "context"
+import (
+	"apiDemo/rpcinterface/interface/common"
+	"context"
+)
 
 // http 远程调用入参数
 type ArgsHttpDemo struct {
+	common.Input
 
 }
 
 // http 返回远程调用参数
 type ReplyHttpDemo struct {
+	common.Output
 
 }
 
