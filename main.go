@@ -36,4 +36,5 @@ func main() {
 	if err != nil {
 		log.Fatalf("server start field:%v", err)
 	}
+	fmt.Println("hello world ")
 }
