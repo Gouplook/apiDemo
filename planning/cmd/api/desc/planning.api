@@ -1,0 +1,116 @@
+syntax  = "v1"
+
+type (
+	Point {
+		Lat    float64     `json:"lat"`
+		Lng    float64     `json:"long"`
+		Z      float64     `json:"z,optional,default=0"`
+		Theta  float64     `json:"theta"`
+		Extend interface{} `json:"properties,optional"`
+	}
+	// ---
+	NTPoint {
+		Lat    float64     `json:"lat"`
+		Lng    float64     `json:"lng"`
+		Z      float64     `json:"z,optional,default=0"`
+		Theta  *float64    `json:"theta,optional"`
+		Extend interface{} `json:"properties,optional"`
+	}
+
+	Node {
+		From []NTPoint `json:"from"`
+		To   []NTPoint `json:"to"`
+	}
+	GetPathReq {
+		ProjectId    string  `json:"project_id,optional"`
+		MapId        int64   `json:"map_id"`
+		MapVersion   int     `json:"map_version"`
+		DataType     int64   `json:"data_type,optional,default=0"`     // 比特标识[...|动态交通]（从右至左：1生效；0不生效）
+		CostType     int     `json:"cost_type,optional,default=1"`     // 1.距离权重；2.时间权重
+		PointType    int     `json:"point_type,optional,default=1"`    // 1. 多点顺序；2.多点依次最近
+		ResponseType int     `json:"response_type,optional,default=1"` // 1. 返回路线+点集；
+		BlockLanes   []int64 `json:"block_lanes,optional"`             //
+		Points       []Point `json:"points"`
+	}
+	// 路线规划请求
+	RoutePlanningReq {
+		MapId        int64     `json:"map_id"`
+		MapVersion   int       `json:"map_version,optional,default=0"`
+		DataType     int64     `json:"data_type,optional,default=0"`     // 比特标识[...|动态交通]（从右至左：1生效；0不生效）
+		CostType     int       `json:"cost_type,optional,default=1"`     // 1.距离权重；2.时间权重
+		ResponseType int       `json:"response_type,optional,default=1"` // 1. 返回路线+点集；
+		BlockLanes   []int64   `json:"block_lanes,optional"`             //
+		Nodes        []NTPoint `json:"nodes"`
+	}
+	// 可到达
+	AccessibleReq {
+		MapId       int64   `json:"map_id"`
+		MapVersion  int     `json:"map_version,optional,default=0"`
+		CarWidth    float64 `json:"car_width,optional,default=1"`
+		MaxDistance float64 `json:"max_distance,optional,default=10"`
+		Point       NTPoint `json:"point"`
+	}
+
+	AccessibleResp {
+		Code  int64   `json:"code"`
+		Msg   string  `json:"msg,default="success"`
+		IsPut bool    `json:"is_put"`
+		Point NTPoint `json:"point"`
+	}
+
+	// 自动推送路线请求
+	AutoAssignReq {
+		ProjectId    string  `json:"project_id"`
+		MapId        int64   `json:"map_id"`
+		MapVersion   int     `json:"map_version"`
+		DeviceId     string  `json:"device_id"`                        //
+		DataType     int64   `json:"data_type,optional,default=0"`     // 比特标识[...|动态交通]（从右至左：1生效；0不生效）
+		CostType     int     `json:"cost_type,optional,default=1"`     // 1.距离权重；2.时间权重
+		PointType    int     `json:"point_type,optional,default=1"`    // 1. 多点顺序；2.多点依次最近
+		ResponseType int     `json:"response_type,optional,default=1"` // 1. 返回路线+点集；
+		BlockLanes   []int64 `json:"block_lanes,optional"`             //
+		Points       []Point `json:"points"`
+	}
+
+	// 取消推送请求
+	CancelAssignReq {
+		DeviceId string `json:"device_id"`
+	}
+
+	ResultPathResp {
+		Distance float64 `json:"distance"`
+		Sorted   []Point `json:"sorted"` // 排序的
+		Dense    []Point `json:"dense"`  // 稠密的
+		Sparse   []Point `json:"spares"` // 稀疏的
+	}
+
+	// robot planning
+	Station {
+		Id   string `json:"id"`
+		Type string `json:"type,optional,omitempty"`
+	}
+
+	RobotPlanningReq {
+		MapID          string    `json:"map_id"`
+		Version        int32     `json:"version,optional,default=0"`
+		ApplicableName string    `json:"applicable_name,optional"`
+		Origin         Station   `json:"origin"`
+		Destination    Station   `json:"destination"`
+		WayPoints      []Station `json:"waypoints,optional"`
+	}
+
+	RobotPlanningRes {
+		Route [][]Station `json:"route"`
+	}
+)
+
+@server (
+	prefix : planning/v1/path
+	group: v1
+)
+service planning {
+	@doc "机器人路径规划"
+	@handler RobotPathPlanning
+	post /robotPathPlanning (RobotPlanningReq) returns (RobotPlanningRes)
+	
+}
